@@ -1,0 +1,4 @@
+# command =>> pip install -r requirements.txt
+pdfx
+SpeechRecognition == 3.8.1
+selenium
