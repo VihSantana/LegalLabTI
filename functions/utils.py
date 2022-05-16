@@ -32,8 +32,10 @@ def copyFromDownloads(logger:Logger,base_name:str,index:int,type:str):
         files = glob.glob(conf.dirDownloads + file_type)
         max_file = max(files, key=os.path.getctime)
         basename = os.path.basename(max_file)
-        file_name = os.path.splitext(basename)[0]
+        file_name = os.path.splitext(basename)[0]  
         if type=='pdf':
+            logger.info(f">> Copiando arquivo {max_file} para {conf.appDir}\\pdf_baixados\\{base_name}-{str(index)}.pdf")
+            print(f">> Copiando arquivo {max_file} para {conf.appDir}\\pdf_baixados\\{base_name}-{str(index)}.pdf")
             shutil.copy(max_file,conf.appDir+"\\pdf_baixados\\"+base_name+"-"+str(index)+".pdf")
             os.remove(max_file)
         else:    

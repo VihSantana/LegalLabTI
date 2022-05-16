@@ -43,7 +43,9 @@ class Core :
                 if erro and type==1:
                     Captcha.resolve(logger,driver)
                 else:
-                    sleep(5)
+                    sleep(3)
+                    logger.info(f">> Download Efetuado com sucesso ...") 
+                    print(f">> Download Efetuado com sucesso ...")
                     copyFromDownloads(logger,base_name,idx+1,'pdf')
                     sleep(randrange(conf.esperar_range)) # esperar para fazer a proxima request
                         

@@ -32,6 +32,6 @@ class Pdf:
             return err,type,ret
         
         type = 0
-        ret = "Download Efetuado com Sucesso..."
+        ret = ">> Efetuando Download do Inteiro Teor ..."
         return err,type,ret
        
