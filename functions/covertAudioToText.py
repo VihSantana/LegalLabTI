@@ -1,7 +1,8 @@
+from logging import Logger
 import speech_recognition as sr
 from time import sleep
 
-def convert(dir,filename):
+def convert(logger:Logger,dir,filename):
     err = False
     ret = None
     try:
@@ -13,7 +14,9 @@ def convert(dir,filename):
             audio_data = r.record(source)
             sleep(0.3)
             ret = r.recognize_google(audio_data,language='pt-br')
+        logger.info(f">> Audio convertido com sucesso")     
     except Exception as e:
+        logger.error(f">> Error ao converter audio ERRO:{e.args}")  
         err = True
 
     return err,ret

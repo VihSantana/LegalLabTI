@@ -3,6 +3,8 @@ from os import path
 
 
 appDir = str(pathlib.Path().resolve())
+pathChromeDriver = str(appDir)+"\\web-driver\\chromedriver.exe"
 dirDownloads = str(path.join(path.expanduser("~"), "Downloads"))
-filtroUrls = "jurisprudencia/pes"
-showBrowser = True
+filtroUrls = "jurisprudencia/pesquisaPalavras"
+showBrowser = True # não alterar
+esperar_range = 15

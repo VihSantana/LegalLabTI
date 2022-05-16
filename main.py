@@ -1,43 +1,42 @@
-
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
-from selenium import webdriver
-from time import sleep
-from selenium.webdriver.chrome.options import Options  
-from controller.captchaController import Captcha
+import os
+import logging
+import config as conf
+from controller.coreController import Core
 from functions import generateJsonHiperLink as gjhl
 from functions import utils as utl
-import config as conf
-chrome_options = Options()
+
+logger = logging.getLogger(__name__)  
+logger.setLevel(logging.DEBUG)
+file_handler = logging.FileHandler('logfile.log')
+formatter    = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 
-#erro,retorno=gjhl.create(conf.appDir,"BJE-202") #gera json contendo informações pdf
-erro,urls=utl.filterHiperLinks(conf.appDir,"BJE-202-url.json",conf.filtroUrls)
+pasta = str(conf.appDir+"\\documents")
+for diretorio, subpastas, arquivos in os.walk(pasta):
+    if len(arquivos)>1:
+       print(f">> {len(arquivos)} arquivos a serem processados ...")
+       logger.info(f">> {len(arquivos)} arquivos a serem processados ...")
+    else:    
+       print(f">> {len(arquivos)} arquivo a ser processado ...")
+       logger.info(f">> {len(arquivos)} arquivo a ser processado ...")
+    for arquivo in arquivos:
+        print(f">> {arquivo} sendo processado ...")
+        logger.info(f">> {arquivo} sendo processado ...")
+        nomeArq = arquivo.split('.')
+        nomeArq = str(nomeArq[0])
+        erro:bool= None
+        retorno = None
+        erro,retorno=gjhl.create(logger,conf.appDir,nomeArq) #gera json contendo informações pdf
+        if erro == False:
+            erro,urls=utl.filterHiperLinks(logger,conf.appDir,retorno,conf.filtroUrls)
+            logger.info(f">> URlS:{urls}")
+            if erro == False:
+                Core.processarUrls(logger,urls,nomeArq)
+                
 
-# faz com que o browser não abra durante o processo
-if conf.showBrowser == False:
-    chrome_options.add_argument("--headless")
- 
-## caminho para o seu webdriver
-pathChromeDriver = str(conf.appDir)+"\\web-driver\\chromedriver.exe"
-driver = webdriver.Chrome(pathChromeDriver, options=chrome_options)
-#driver.get(urls[0])
-parsed_url = urlparse(urls[len(urls)-1])
-print(urls[len(urls)-1])
-numeroRegistro = parse_qs(parsed_url.query)['numeroRegistro'][0]
-totalLinhas = parse_qs(parsed_url.query)['totalLinhas'][0]
-print(numeroRegistro)
-print(totalLinhas)
 
-try: # tenta resolver o captcha
-    #sleep(3)# aguardando página carregar
-    #Captcha.resolve(driver)   
-    pass 
-except Exception as e: 
-    print(e)
-    pass    
-
-#baixa pdf
-#sleep(5)
 
 
