@@ -36,12 +36,15 @@ class Core :
             erro:bool = True
             msg:str  = None
             type:int = None
-
+            qtd_erro:int = 0
             while erro:
                 erro,type,msg = Pdf.baixar(logger,driver)
                 print(msg)
                 if erro and type==1:
                     Captcha.resolve(logger,driver)
+                    qtd_erro+=1
+                    if qtd_erro==conf.qtd_erro:
+                        erro = False
                 else:
                     sleep(3)
                     logger.info(f">> Download Efetuado com sucesso ...") 
